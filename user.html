@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page</title>
+    <link href="public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<h1>User</h1>
+
+<a href="index.html">Back to blog</a>
+<button id="logout-button">Logout</button>
+
+<label for="comment" style="display: block">Comment</label>
+<textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+<button id="add-comment" style="display: block">Add comment</button>
+
+<div id="comment-preview"></div>
+
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="src/auth.ts" type="module"></script>
+<script src="src/user.ts" type="module"></script>
+</body>
+</html>
