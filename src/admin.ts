@@ -13,10 +13,15 @@ const getCommentsToVerify = async (): Promise<void> => {
   const { data } = await axios.get<CommentListResponse[]>('/api/comments/unverified');
   const commentDiv = document.getElementById('comment-div');
   data.forEach((comment) => {
-    const commentElement = document.createElement('div');
-    commentElement.textContent = comment.commentText;
+    const commentListItem = document.createElement('li');
+    commentListItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+    commentListItem.textContent = comment.commentText;
+
+    const commentActions = document.createElement('div');
+    commentActions.className = 'ms-auto d-flex gap-3';
 
     const approveButton = document.createElement('button');
+    approveButton.className = 'btn btn-success';
     approveButton.innerHTML = 'Approve';
     approveButton.onclick = () => {
       approveComment(comment.commentId, true);
@@ -25,20 +30,22 @@ const getCommentsToVerify = async (): Promise<void> => {
 
     const deleteButton = document.createElement('button');
     deleteButton.innerHTML = 'Delete';
+    deleteButton.className = 'btn btn-danger';
     deleteButton.onclick = () => {
       approveComment(comment.commentId, false);
       window.location.reload();
     };
 
-    commentElement.appendChild(approveButton);
-    commentElement.appendChild(deleteButton);
+    commentActions.appendChild(approveButton);
+    commentActions.appendChild(deleteButton);
+    commentListItem.appendChild(commentActions);
 
     if (!commentDiv) {
       console.error('Comment div not found');
       return;
     }
 
-    commentDiv.appendChild(commentElement);
+    commentDiv.appendChild(commentListItem);
   });
 };
 
@@ -50,13 +57,21 @@ const getAllUsers = async (): Promise<UserResponse[]> => {
 
 const showAllUsers = (): void => {
   const userDiv = document.getElementById('user-div');
+  if (!userDiv) {
+    console.error('User div not found');
+    return;
+  }
   users.forEach((user) => {
-    const userElement = document.createElement('div');
+    const userElement = document.createElement('li');
+    userElement.className = 'list-group-item d-flex align-items-center flex-row-reverse justify-content-end gap-3'
     userElement.textContent = user.username;
-    if (!userDiv) {
-      console.error('User div not found');
-      return;
-    }
+    const img = document.createElement('img');
+    img.src = 'public/person-circle.svg';
+    img.alt = '...';
+    img.className = 'img-fluid rounded-start';
+    img.style.width = '3%';
+    img.style.height = '3%';
+    userElement.appendChild(img);
     userDiv.appendChild(userElement);
   });
 };
@@ -64,18 +79,18 @@ const showAllUsers = (): void => {
 const addUser = async (): Promise<void> => {
   const requestData: UserRequest = { username: `user${users.length + 1}`, password: 'user', role: 'USER' };
   // HACKABLE
-  // await axios.get('/api/users', { params: requestData });
+  await axios.get('/api/users', { params: requestData });
   // SECURED
-  await axios.post('/api/users', requestData);
+  // await axios.post('/api/users', requestData);
   window.location.reload();
 };
 
 const addAdmin = async () => {
   const requestData: UserRequest = { username: `admin${users.length + 1}`, password: 'admin', role: 'ADMIN' };
   // HACKABLE
-  // await axios.get('/api/users', { params: requestData });
+  await axios.get('/api/users', { params: requestData });
   // SECURED
-  await axios.post('/api/users', requestData);
+  // await axios.post('/api/users', requestData);
   window.location.reload();
 };
 

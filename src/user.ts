@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as bootstrap from 'bootstrap';
 import { user } from './auth.ts';
 import { CommentListResponse } from "./models.ts";
 
@@ -16,13 +17,28 @@ const addComment = async (): Promise<void> => {
     return;
   }
   // HACKABLE
-  // addedComment.innerHTML = `Added new comment: ${data.commentText}`;
+  addedComment.innerHTML = `Added new comment: ${data.commentText}`;
   // SECURED
-  addedComment.textContent = `Added new comment: ${data.commentText}`;
+  // addedComment.textContent = `Added new comment: ${data.commentText}`;
   console.log('User comment added: ', data);
 };
 
-const addCommentButton = document.getElementById('add-comment');
+const addCommentButton = document.getElementById('add-comment-button');
 if (addCommentButton) {
   addCommentButton.addEventListener('click', addComment);
+}
+
+const toastTrigger = document.getElementById('add-comment-button')
+const toast = document.getElementById('add-comment')
+
+if (toastTrigger && toast) {
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+  toastTrigger.addEventListener('click', async () => {
+    try {
+      await addComment();
+      toastBootstrap.show();
+    } catch (e) {
+      console.error(`Error adding comment: ${e}`);
+    }
+  });
 }
