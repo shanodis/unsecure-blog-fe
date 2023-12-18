@@ -23,7 +23,7 @@ const fulfillHandler = (response: AxiosResponse): AxiosResponse => response;
 const rejectHandler = async (error: AxiosError): Promise<AxiosError> => {
   const status: number = error?.response?.status || -1;
 
-  if ([401, 403, 406].includes(status)) {
+  if ([401, 403, 406].includes(status) && !excludedPages.includes(window.location.pathname)) {
     cleanUpAndRedirect();
   }
 

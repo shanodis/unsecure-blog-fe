@@ -17,7 +17,11 @@ if (form) {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const [usernameInput, passwordInput] = event.target as unknown as HTMLInputElement[];
-    const user = await loginUser(usernameInput.value, passwordInput.value);
-    window.location.href = user.role === 'ADMIN' ? '/admin.html' : '/user.html';
+    try {
+      const user = await loginUser(usernameInput.value, passwordInput.value);
+      window.location.href = user.role === 'ADMIN' ? '/admin.html' : '/user.html';
+    } catch (error) {
+      console.error(error);
+    }
   });
 }
